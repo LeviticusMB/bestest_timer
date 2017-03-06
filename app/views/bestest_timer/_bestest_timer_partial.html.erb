@@ -1,0 +1,16 @@
+<%= stylesheet_link_tag 'bestest_timer.css', :plugin => 'bestest_timer', :media => 'all' %>
+<%= javascript_include_tag 'bestest_timer.js', :plugin => 'bestest_timer' %>
+
+<% if User.current.logged? %>
+<%= javascript_tag do %>
+    var bestest_timer = {
+	plugin:      <%= Redmine::Plugin.find(:bestest_timer).to_json.html_safe %>,
+	user_id:     <%= User.current.id.to_json.html_safe %>,
+	api_key:     <%= User.current.api_key.to_json.html_safe %>,
+	activities:  <%= (@project ? @project.activities : nil).to_json.html_safe %>,
+	project:     <%= @project.to_json.html_safe %>,
+	issue:       <%= @issue.to_json.html_safe %>,
+	timelog_url: <%= url_for({:controller => 'timelog', :action => 'create', :format => 'json'}).to_json.html_safe %>,
+    };
+<% end %>
+<% end %>

@@ -1,0 +1,13 @@
+
+.bestest_timer_button {
+    height: 22px;
+    #width:  22px;
+}
+
+.bestest_timer_dialog label, .bestest_timer_dialog input {
+    display: block;
+}
+
+.bestest_timer_dialog .ui-dialog-titlebar-close {
+  display: none;
+}
