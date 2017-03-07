@@ -20,9 +20,9 @@ $(document).ready(function () {
 	var dialog   = null;
 
 	function updateUI() {
-		button.text(state.started ? 'Recording' : 'Start Timer')
+		button.text(state.started ? t('recording') : t('start'))
 			.attr('title',
-			state.started ? 'Logging to ' + state.descr + ' since ' + toTime(new Date(state.started)) : null);
+			state.started ? t('logging_since', { descr: state.descr, time: toTime(new Date(state.started)) }) : null);
 	}
 
 	function loadState() {
@@ -57,17 +57,20 @@ $(document).ready(function () {
 
 	function start() {
 		if (!bestest_timer.api_key) {
-			alert('Please check that "Enable REST web service" is\nenabled in Redmine Administration/Settings/API.');
+			alert(t('need_rest_api'));
 		}
 		else if (!bestest_timer.project && !bestest_timer.issue) {
-			alert('Neither project nor issue could be inferred from current page.');
+			alert(t('nothing_inferred'));
 		}
 		else if (!bestest_timer.access) {
-			alert('You do not have permission to log time to ' + bestest_timer.project.name + '.');
+			alert(t('no_permission', { project: bestest_timer.project.name }));
 		}
 		else {
 			state.started = Date.now();
-			state.descr = bestest_timer.project.name + (bestest_timer.issue ? ', issue #' + bestest_timer.issue.id : '');
+			state.descr = t(bestest_timer.issue ? 'state_descr_issue' : 'state_descr', {
+				project: bestest_timer.project.name,
+				issue: bestest_timer.issue && bestest_timer.issue.id
+			});
 			state.project = bestest_timer.project.id;
 			state.issue = bestest_timer.issue && bestest_timer.issue.id;
 			state.activity = (bestest_timer.activities.filter(function (activity) { return activity.is_default; })[0] || { id: null }).id;
@@ -98,10 +101,7 @@ $(document).ready(function () {
 		})
 		.done(function (response) {
 			var te = response.time_entry;
-			displayNotification('Logged ' + te.hours + ' hours to ' + te.project.name
-				+ (te.issue ? ', issue #' + te.issue.id : '')
-				+ ' (' + te.comments + ').',
-				te.id);
+			displayNotification(t('notification_title', { hours: te.hours, descr: state.descr }), te.comments, te.id);
 			clearState();
 		})
 		.fail(function ($xhr) {
@@ -135,10 +135,10 @@ $(document).ready(function () {
 		});
 
 		[
-			$('<label for="bestest_timer_activity">Activity</label>'),
+			$('<label for="bestest_timer_activity"></label>').text(t('activity')),
 			select,
-			$('<label for="bestest_timer_comment">Comment</label>'),
-			$('<input id="bestest_timer_comment" type="text" size="50" autocomplete="off" />').attr('value', state.comment)
+			$('<label for="bestest_timer_comment"></label>').text(t('comment')),
+			$('<input id="bestest_timer_comment" type="text" size="50" autocomplete="off" autofocus />').attr('value', state.comment)
 				.change(function () {
 					state.comment = this.value;
 				}),
@@ -154,23 +154,23 @@ $(document).ready(function () {
 			modal: true,
 			hide: 200,
 			show: 200,
-			title: bestest_timer.plugin.name,
+			title: t('plugin_name'),
 
 			buttons: [
 				{
-					text: 'Commit', icons: { primary: 'ui-icon-clock' }, click: function () {
+					text: t('commit'), icons: { primary: 'ui-icon-clock' }, click: function () {
 						commit();
 						$(this).dialog('close');
 					}
 				},
 				{
-					text: 'Discard', icons: { primary: 'ui-icon-trash' }, click: function () {
+					text: t('discard'), icons: { primary: 'ui-icon-trash' }, click: function () {
 						discard();
 						$(this).dialog('close');
 					}
 				},
 				{
-					text: 'Close', icons: { primary: 'ui-icon-close' }, click: function () {
+					text: t('close'), icons: { primary: 'ui-icon-close' }, click: function () {
 						saveState();
 						$(this).dialog('close');
 					}
@@ -179,22 +179,28 @@ $(document).ready(function () {
 		});
 	}
 
-	function displayNotification(message, idx) {
+	function displayNotification(title, message, idx) {
 		if (!window.Notification) {
-			alert(message);
+			alert(title + ': ' + message);
 		}
-		else if (Notification.permission === "granted") {
-			$(new Notification(message)).click(function () {
+		else if (Notification.permission === 'granted') {
+			$(new Notification(title, { body: message })).click(function () {
 				window.location.href = bestest_timer.timelog_idx.replace('XXX', idx);
 			});
 		}
-		else if (Notification.permission !== "denied") {
+		else if (Notification.permission !== 'denied') {
 			Notification.requestPermission(function (permission) {
-				if (permission === "granted") {
-					displayNotification(message, idx);
+				if (permission === 'granted') {
+					displayNotification(title, message, idx);
 				}
 			});
 		}
+	}
+
+	function t(key, props) {
+		return (bestest_timer.lang[key] || key).replace(/%{([^}]+)}/g, function(_, prop) {
+			return String(Object(props)[prop]);
+		});
 	}
 
 	button.click(function () {

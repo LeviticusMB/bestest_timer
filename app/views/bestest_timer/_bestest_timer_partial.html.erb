@@ -3,8 +3,9 @@
 
 <% if User.current.logged? %>
 <%= javascript_tag do %>
-    var bestest_timer = {
+var bestest_timer = {
 	plugin:      <%= Redmine::Plugin.find(:bestest_timer).to_json.html_safe %>,
+	lang:        <%= t(:bestest_timer).to_json.html_safe %>,
 	user_id:     <%= User.current.id.to_json.html_safe %>,
 	access:      <%= User.current.allowed_to?(:log_time, @project) %>,
 	api_key:     <%= (Setting.rest_api_enabled? ? User.current.api_key : nil).to_json.html_safe %>,
@@ -13,6 +14,6 @@
 	issue:       <%= @issue.to_json.html_safe %>,
 	timelog_url: <%= url_for({:controller => 'timelog', :action => 'create', :format => 'json'}).to_json.html_safe %>,
 	timelog_idx: <%= url_for({:controller => 'timelog', :action => 'edit', :id => 'XXX' }).to_json.html_safe %>,
-    };
+};
 <% end %>
 <% end %>

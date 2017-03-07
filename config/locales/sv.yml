@@ -1,0 +1,18 @@
+# Swedish strings go here for Rails i18n
+sv:
+  bestest_timer:
+    activity: "Aktivitet"
+    close: "Sträng"
+    comment: "Kommentar"
+    commit: "Stämpla ut"
+    discard: "Kasta"
+    logging_since: "Loggar tid till %{descr} sedan %{time}"
+    need_rest_api: "Vänligen säkerställ att 'Aktivera REST webbtjänst' är\npåslaget i Redmines Administration/Inställningar/API."
+    no_permission: "Du har inte rättighet att logga tid till %{project}."
+    nothing_inferred: "Varken projekt eller ärende kunde räknas ut från nuvarande sida."
+    notification_title: "Loggade %{hours} timmar till %{descr}"
+    plugin_name: "Bästaste stämpelklockan för Redmine"
+    recording: "(Loggar tid)"
+    start: "Stämpla in"
+    state_descr_issue: "%{project}, ärende #%{issue}"
+    state_descr: "%{project}"
