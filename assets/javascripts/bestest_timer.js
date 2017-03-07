@@ -80,7 +80,8 @@ $(document).ready(function() {
 	    var te = response.time_entry;
 	    displayNotification('Logged ' + te.hours + ' hours to ' + te.project.name
 				+ (te.issue ? ', issue #' + te.issue.id : '')
-				+ ' (' + te.comments + ').');
+				+ ' (' + te.comments + ').',
+				te.id);
 	    clearState();
 	})
 	.fail(function($xhr) {
@@ -158,17 +159,19 @@ $(document).ready(function() {
 	});
     }
 
-    function displayNotification(message) {
+    function displayNotification(message, idx) {
 	if (!window.Notification) {
 	    alert(message);
 	}
 	else if (Notification.permission === "granted") {
-	    new Notification(message);
+	    $(new Notification(message)).click(function() {
+		window.location.href = bestest_timer.timelog_idx.replace('XXX', idx);
+	    });
 	}
 	else if (Notification.permission !== "denied") {
 	    Notification.requestPermission(function (permission) {
 		if (permission === "granted") {
-		    displayNotification(message);
+		    displayNotification(message, idx);
 		}
 	    });
 	}
