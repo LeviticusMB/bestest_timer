@@ -11,6 +11,7 @@
 	project:     <%= @project.to_json.html_safe %>,
 	issue:       <%= @issue.to_json.html_safe %>,
 	timelog_url: <%= url_for({:controller => 'timelog', :action => 'create', :format => 'json'}).to_json.html_safe %>,
+	timelog_idx: <%= url_for({:controller => 'timelog', :action => 'edit', :id => 'XXX' }).to_json.html_safe %>,
     };
 <% end %>
 <% end %>
