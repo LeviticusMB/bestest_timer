@@ -14,14 +14,20 @@ $(document).ready(function () {
 		activities: null,
 	};
 
-	var state = JSON.parse(localStorage.getItem('bestest_timer/' + bestest_timer.user_id) || JSON.stringify(cleanState));
-	var button = $('<button class="bestest_timer_button"></button>');
-	var dialog = null;
+	var state;
+	var stateKey = 'bestest_timer/' + bestest_timer.user_id;
+	var button   = $('<button class="bestest_timer_button"></button>');
+	var dialog   = null;
 
 	function updateUI() {
 		button.text(state.started ? 'Recording' : 'Start Timer')
 			.attr('title',
 			state.started ? 'Logging to ' + state.descr + ' since ' + toTime(new Date(state.started)) : null);
+	}
+
+	function loadState() {
+		state = JSON.parse(localStorage.getItem(stateKey) || JSON.stringify(cleanState));
+		updateUI();
 	}
 
 	function clearState() {
@@ -30,9 +36,20 @@ $(document).ready(function () {
 	}
 
 	function saveState() {
-		localStorage.setItem('bestest_timer/' + bestest_timer.user_id, JSON.stringify(state));
+		localStorage.setItem(stateKey, JSON.stringify(state));
 		updateUI();
 	}
+
+	$(window).bind('storage', function(event) {
+		if (event.originalEvent.key === stateKey) {
+			loadState();
+
+			if (!state.started && dialog) {
+				dialog.dialog('close');
+			}
+		}
+	});
+
 
 	function toTime(date) {
 		return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: 'numeric' });
@@ -189,7 +206,8 @@ $(document).ready(function () {
 		}
 	});
 
-	updateUI();
+	loadState();
 
 	$('#quick-search').append(button);
 });
+
