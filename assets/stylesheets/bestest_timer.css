@@ -1,7 +1,9 @@
 
 .bestest_timer_button {
-    height: 22px;
-    #width:  22px;
+    height: 24px;
+    background-color: white;
+    border: 0px;
+    border-radius: 3px;
 }
 
 .bestest_timer_dialog label, .bestest_timer_dialog input {
