@@ -16,3 +16,4 @@ en:
     start: "Punch in"
     state_descr_issue: "%{project}, issue #%{issue}"
     state_descr: "%{project}"
+    submit_failed: "Failed to log work shift to Redmine: %{error}"

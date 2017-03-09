@@ -106,7 +106,7 @@ $(document).ready(function () {
 		})
 		.fail(function ($xhr) {
 			console.log(arguments);
-			alert('Failed to send time entry to Redmine: ' + ($xhr.responseJSON && $xhr.responseJSON.errors));
+			alert(t('submit_failed', { error: $xhr.responseJSON && $xhr.responseJSON.errors }));
 		});
 	}
 
