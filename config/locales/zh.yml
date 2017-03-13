@@ -1,0 +1,19 @@
+# Simplified Chinese strings go here for Rails i18n
+zh:
+  bestest_timer:
+    activity: "活动"
+    close: "关闭"
+    comment: "批注"
+    commit: "计时关闭并登记工时"
+    discard: "取消计时"
+    logging_since: "从 %{time} 开始，记录到 %{descr} "
+    need_rest_api: "请确认是否启用了REST web service（路径：管理 - 配置 - API）"
+    no_permission: "您没有在%{project} 项目中计时登记的权限。"
+    nothing_inferred: "当前页不包含项目或任务信息。"
+    notification_title: "在 %{descr} 中，共计 %{hours} 工时"
+    plugin_name: "Redmine任务计时登记工具"
+    recording: "[正在记录]"
+    start: "计时开始"
+    state_descr_issue: "%{project} - #%{issue}"
+    state_descr: "%{project}"
+    submit_failed: "无法将工时登记到Redmine：%{error}"
