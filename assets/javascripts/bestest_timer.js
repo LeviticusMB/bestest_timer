@@ -106,7 +106,7 @@ $(document).ready(function () {
 		})
 		.fail(function ($xhr) {
 			console.log(arguments);
-			alert('Failed to send time entry to Redmine: ' + ($xhr.responseJSON && $xhr.responseJSON.errors));
+			alert(t('submit_failed', { error: $xhr.responseJSON && $xhr.responseJSON.errors }));
 		});
 	}
 
@@ -141,6 +141,12 @@ $(document).ready(function () {
 			$('<input id="bestest_timer_comment" type="text" size="50" autocomplete="off" autofocus />').attr('value', state.comment)
 				.change(function () {
 					state.comment = this.value;
+				})
+				.keyup(function(event) {
+					if (event.keyCode === 13) {
+						commit();
+						dialog.dialog('close');
+					}
 				}),
 		].forEach(function (elem) {
 			fieldset.append(elem);
@@ -160,19 +166,19 @@ $(document).ready(function () {
 				{
 					text: t('commit'), icons: { primary: 'ui-icon-clock' }, click: function () {
 						commit();
-						$(this).dialog('close');
+						dialog.dialog('close');
 					}
 				},
 				{
 					text: t('discard'), icons: { primary: 'ui-icon-trash' }, click: function () {
 						discard();
-						$(this).dialog('close');
+						dialog.dialog('close');
 					}
 				},
 				{
 					text: t('close'), icons: { primary: 'ui-icon-close' }, click: function () {
 						saveState();
-						$(this).dialog('close');
+						dialog.dialog('close');
 					}
 				},
 			]

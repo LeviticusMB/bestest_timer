@@ -6,6 +6,8 @@ It adds a single button to Redmine that starts logging time to the current issue
 
 And that's all there is to it.
 
+![Bestest Punch Clock screenshot](README.1.png)
+
 # Installation
 
 `cd` into the `redmine/plugins` folder and run:
