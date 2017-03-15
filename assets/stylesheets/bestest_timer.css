@@ -6,8 +6,10 @@
     border-radius: 3px;
 }
 
-.bestest_timer_dialog label, .bestest_timer_dialog input {
-    display: block;
+.bestest_timer_dialog label {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 50%;
 }
 
 .bestest_timer_dialog .ui-dialog-titlebar-close {

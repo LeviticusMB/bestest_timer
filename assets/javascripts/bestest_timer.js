@@ -119,37 +119,37 @@ $(document).ready(function () {
 			dialog.dialog('destroy');
 		}
 
-		var form = $('<form/>').submit(false);
-		var fieldset = $('<fieldset>').append($('<legend/>').text(button.attr('title'))).appendTo(form);
-		var select = $('<select id="bestest_timer_activity"/>')
-			.change(function () {
-				state.activity = Number(this.value);
-			});
-
-		if (!state.activity) {
-			$('<option/>').appendTo(select);
-		}
+		var form       = $('<form/>').submit(false);
+		var activities = $('<fieldset>').append($('<legend/>').text(t('activity'))).appendTo(form);
 
 		state.activities.forEach(function (activity) {
-			$('<option/>', { value: activity.id, selected: activity.id === state.activity }).text(activity.name).appendTo(select);
+			$('<label/>')
+				.append($('<input/>', { type: 'radio', name: 'activity', value: activity.id, checked: activity.id === state.activity })
+					.click(function() {
+						state.activity = Number(this.value);
+					})
+				)
+				.append(document.createTextNode(activity.name))
+				.appendTo(activities);
 		});
 
 		[
-			$('<label for="bestest_timer_activity"></label>').text(t('activity')),
-			select,
-			$('<label for="bestest_timer_comment"></label>').text(t('comment')),
-			$('<input id="bestest_timer_comment" type="text" size="50" autocomplete="off" autofocus />').attr('value', state.comment)
-				.change(function () {
-					state.comment = this.value;
-				})
-				.keyup(function(event) {
-					if (event.keyCode === 13) {
-						commit();
-						dialog.dialog('close');
-					}
-				}),
+			$('<fieldset/>').append($('<legend/>').text(t('status'))).append(document.createTextNode(button.attr('title'))),
+			activities,
+			$('<fieldset/>').append($('<legend/>').text(t('comment'))).append(
+				$('<input id="bestest_timer_comment" type="text" size="50" autocomplete="off" autofocus />').attr('value', state.comment)
+					.change(function () {
+						state.comment = this.value;
+					})
+					.keyup(function (event) {
+						if (event.keyCode === 13) {
+							commit();
+							dialog.dialog('close');
+						}
+					})
+			)
 		].forEach(function (elem) {
-			fieldset.append(elem);
+			form.append(elem);
 		});
 
 		dialog = form.dialog({

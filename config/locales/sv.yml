@@ -16,4 +16,5 @@ sv:
     start: "Stämpla in"
     state_descr_issue: "%{project}, ärende #%{issue}"
     state_descr: "%{project}"
+    status: "Status"
     submit_failed: "Misslyckades med att skicka arbetspass till Redmine: %{error}"
