@@ -120,7 +120,8 @@ $(document).ready(function () {
 		}
 
 		var form       = $('<form/>').submit(false);
-		var activities = $('<fieldset>').append($('<legend/>').text(t('activity'))).appendTo(form);
+		var activities = $('<fieldset>').append($('<legend/>').text(t('activity')));
+		var labels     = $('<div>', { "class": "bestest_timer_activities" }).appendTo(activities);
 
 		state.activities.forEach(function (activity) {
 			$('<label/>')
@@ -130,14 +131,14 @@ $(document).ready(function () {
 					})
 				)
 				.append(document.createTextNode(activity.name))
-				.appendTo(activities);
+				.appendTo(labels);
 		});
 
 		[
 			$('<fieldset/>').append($('<legend/>').text(t('status'))).append(document.createTextNode(button.attr('title'))),
 			activities,
 			$('<fieldset/>').append($('<legend/>').text(t('comment'))).append(
-				$('<input id="bestest_timer_comment" type="text" size="50" autocomplete="off" autofocus />').attr('value', state.comment)
+				$('<input id="bestest_timer_comment" type="text" autocomplete="off" autofocus />').attr('value', state.comment)
 					.change(function () {
 						state.comment = this.value;
 					})
