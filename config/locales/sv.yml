@@ -2,7 +2,7 @@
 sv:
   bestest_timer:
     activity: "Aktivitet"
-    close: "Sträng"
+    close: "Stäng"
     comment: "Kommentar"
     commit: "Stämpla ut"
     discard: "Kasta"
