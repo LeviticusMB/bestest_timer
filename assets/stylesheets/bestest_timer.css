@@ -22,4 +22,5 @@
 
 .bestest_timer_dialog input[type='text'] {
     width: 100%;
+    box-sizing: border-box;
 }
