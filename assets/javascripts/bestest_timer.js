@@ -163,6 +163,14 @@ $(document).ready(function () {
 			show: 200,
 			title: t('plugin_name'),
 
+			open: function() { // Hack to remove black line in Safari
+				if (/Apple/.test(window.navigator.vendor)) {
+					$('.bestest_timer_dialog').each(function(idx, elem) {
+						elem.style.background = window.getComputedStyle(elem).backgroundColor;
+					});
+				}
+			},
+
 			buttons: [
 				{
 					text: t('commit'), icons: { primary: 'ui-icon-clock' }, click: function () {
