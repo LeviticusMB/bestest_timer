@@ -1,0 +1,20 @@
+# Russian strings go here for Rails i18n
+ru:
+  bestest_timer:
+    activity: "Статус"
+    close: "Закрыть"
+    comment: "Комментарий"
+    commit: "Записать"
+    discard: "Отменить"
+    logging_since: "%{descr} с %{time}"
+    need_rest_api: "Пожалуйста, проверьте, что опция 'Включить веб-сервис REST'' активирована — администрирование/Настройки/API."
+    no_permission: "У вас нет разрешений для учета времени в проекте %{project}."
+    nothing_inferred: "Нужно выбрать задачу или проект, чтобы запустить учет времени"
+    notification_title: "Учтено %{hours} ч. для %{descr}"
+    plugin_name: "Учет времени"
+    recording: "(Ведется учет времени)"
+    start: "Запустить учет времени"
+    state_descr_issue: "%{project}, задача #%{issue}"
+    state_descr: "%{project}"
+    submit_failed: "Не удалось учесть время: %{error}"
+
