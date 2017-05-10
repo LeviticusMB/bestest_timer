@@ -1,0 +1,19 @@
+# Portuguese Brazil strings go here for Rails i18n
+"pt-BR":
+  bestest_timer:
+    activity: "Atividade"
+    close: "Fechar"
+    comment: "Comentar"
+    commit: "Confirmar"
+    discard: "Descartar"
+    logging_since: "Registrado para %{descr} desde %{time}"
+    need_rest_api: "Por favor verifique a configuração 'Ativar serviços REST'' esta\nhabilitada no Redmine Administração/Configuração/API."
+    no_permission: "Você não tem permissão para registrar o tempo para %{project}."
+    nothing_inferred: "Abra um projeto ou navegue até uma tarefa."
+    notification_title: "Trabalhado %{hours} horas para %{descr}"
+    plugin_name: "Bestest Punch Clock for Redmine"
+    recording: "(Contando)"
+    start: "Contar"
+    state_descr_issue: "%{project}, tarefa #%{issue}"
+    state_descr: "%{project}"
+    submit_failed: "Falha ao registrar a tempo de trabalho para Redmine: %{error}"
