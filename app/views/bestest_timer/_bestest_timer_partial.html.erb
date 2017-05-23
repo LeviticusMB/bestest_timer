@@ -11,7 +11,7 @@ var bestest_timer = {
 	api_key:     <%= (Setting.rest_api_enabled? ? User.current.api_key : nil).to_json.html_safe %>,
 	activities:  <%= (@project ? @project.activities : nil).to_json.html_safe %>,
 	project:     <%= @project.to_json.html_safe %>,
-	project_lnk: <%= link_to_project(@project).to_json.html_safe %>,
+	project_lnk: <%= (@project ? link_to_project(@project) : nil).to_json.html_safe %>,
 	issue:       <%= @issue.to_json.html_safe %>,
 	issue_lnk:   <%= (@issue ? link_to_issue(@issue) : nil).to_json.html_safe %>,
 	timelog_url: <%= url_for({:controller => 'timelog', :action => 'create', :format => 'json'}).to_json.html_safe %>,
