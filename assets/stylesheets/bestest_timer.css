@@ -20,6 +20,10 @@
     display: block;
 }
 
+.bestest_timer_dialog td {
+    vertical-align: top;
+}
+
 .bestest_timer_dialog input[type='text'] {
     width: 100%;
     box-sizing: border-box;

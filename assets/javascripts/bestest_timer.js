@@ -6,11 +6,11 @@ $(document).ready(function () {
 
 	var cleanState = {
 		started: null,
+		comment: null,
 		descr: null,
 		project: null,
 		issue: null,
 		activity: null,
-		comment: null,
 		activities: null,
 	};
 
@@ -55,6 +55,10 @@ $(document).ready(function () {
 		return date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' });
 	}
 
+	function timeComment(stopped) {
+		return toTime(new Date(state.started)) + '–' + toTime(stopped);
+	}
+
 	function start() {
 		if (!bestest_timer.api_key) {
 			alert(t('need_rest_api'));
@@ -66,29 +70,32 @@ $(document).ready(function () {
 			alert(t('no_permission', { project: bestest_timer.project.name }));
 		}
 		else {
-			state.started = Date.now();
-			state.descr = t(bestest_timer.issue ? 'state_descr_issue' : 'state_descr', {
-				project: bestest_timer.project.name,
-				issue: bestest_timer.issue && bestest_timer.issue.id
-			});
-			state.project = bestest_timer.project.id;
-			state.issue = bestest_timer.issue && bestest_timer.issue.id;
-			state.activity = (bestest_timer.activities.filter(function (activity) { return activity.is_default; })[0] || { id: null }).id;
-			state.activities = bestest_timer.activities;
+			state = {
+				started:    Date.now(),
+				comment:    '',
+				descr:      t(bestest_timer.issue ? 'state_descr_issue' : 'state_descr', {
+								project: bestest_timer.project.name,
+								issue: bestest_timer.issue && bestest_timer.issue.id
+							}),
+				project:    $.extend({}, bestest_timer.project, { _lnk: bestest_timer.project_lnk }),
+				issue:      bestest_timer.issue && $.extend({}, bestest_timer.issue, { _lnk: bestest_timer.issue_lnk }),
+				activity:   (bestest_timer.activities.filter(function (activity) { return activity.is_default; })[0] || { id: null }).id,
+				activities: bestest_timer.activities,
+			}
 			saveState();
 		}
 	}
 
 	function commit() {
 		var stopped = new Date();
-		var comment = ((state.comment || '') + ' [' + toTime(new Date(state.started)) + '-' + toTime(stopped) + ']').trim();
+		var comment = (state.comment + ' [' + timeComment(stopped) + ']').trim();
 
 		$.ajax(bestest_timer.timelog_url, {
 			method: 'POST',
 			data: JSON.stringify({
 				time_entry: {
-					project_id: state.project,
-					issue_id: state.issue,
+					project_id: state.project.id,
+					issue_id: state.issue && state.issue.id,
 					activity_id: state.activity,
 					hours: (stopped - state.started) / 1000 / 60 / 60,
 					comments: comment,
@@ -135,7 +142,13 @@ $(document).ready(function () {
 		});
 
 		[
-			$('<fieldset/>').append($('<legend/>').text(t('status'))).append(document.createTextNode(button.attr('title'))),
+			$('<fieldset/>').append($('<legend/>').text(t('details'))).append(
+				$('<table/>').append(
+					$('<tr/>').append($('<td/>').text(t('time')), $('<td/>').text(timeComment(new Date()))),
+					$('<tr/>').append($('<td/>').text(t('project')), $('<td/>').html(state.project._lnk)),
+					state.issue && $('<tr/>').append($('<td/>').text(t('issue')), $('<td/>').html(state.issue._lnk)),
+				)
+			),
 			activities,
 			$('<fieldset/>').append($('<legend/>').text(t('comment'))).append(
 				$('<input id="bestest_timer_comment" type="text" autocomplete="off" autofocus />').attr('value', state.comment)

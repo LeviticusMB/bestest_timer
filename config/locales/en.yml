@@ -1,20 +1,30 @@
 # English strings go here for Rails i18n
 en:
   bestest_timer:
+    plugin_name: "Bestest Punch Clock for Redmine"
+
+    start: "Punch in"
+    recording: "(Logging)"
+
+    details: "Details"
+    time: "Time:"
+    project: "Project:"
+    issue: "Issue:"
+
     activity: "Activity"
-    close: "Close"
+
     comment: "Comment"
+
+    close: "Close"
     commit: "Punch out"
     discard: "Discard"
+
     logging_since: "Logging to %{descr} since %{time}"
+    notification_title: "Logged %{hours} hours to %{descr}"
+    state_descr_issue: "%{project}, issue #%{issue}"
+    state_descr: "%{project}"
+
     need_rest_api: "Please check that 'Enable REST web service' is\nenabled in Redmine Administration/Settings/API."
     no_permission: "You do not have permission to log time to %{project}."
     nothing_inferred: "Neither project nor issue could be inferred from current page."
-    notification_title: "Logged %{hours} hours to %{descr}"
-    plugin_name: "Bestest Punch Clock for Redmine"
-    recording: "(Logging)"
-    start: "Punch in"
-    state_descr_issue: "%{project}, issue #%{issue}"
-    state_descr: "%{project}"
-    status: "Status"
     submit_failed: "Failed to log work shift to Redmine: %{error}"
