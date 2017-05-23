@@ -52,7 +52,7 @@ $(document).ready(function () {
 
 
 	function toTime(date) {
-		return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: 'numeric' });
+		return date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' });
 	}
 
 	function start() {
