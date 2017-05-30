@@ -179,7 +179,7 @@ $(document).ready(function () {
 		dialog = form.dialog({
 			dialogClass: 'bestest_timer_dialog',
 			position: { my: 'right top', at: 'right bottom', of: button },
-			width: 400,
+			width: 450,
 			draggable: false,
 			modal: true,
 			hide: 200,
