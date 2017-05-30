@@ -27,6 +27,16 @@ $(document).ready(function () {
 
 	function loadState() {
 		state = JSON.parse(localStorage.getItem(stateKey) || JSON.stringify(cleanState));
+
+		// Migrate state from v1.0
+		if (typeof state.project === 'number') {
+			state.project = { id: state.project, _lnk: 'Project ' + state.project };
+		}
+
+		if (typeof state.issue === 'number') {
+			state.issue = { id: state.issue, _lnk: 'Issue #' + state.issue };
+		}
+
 		updateUI();
 	}
 
