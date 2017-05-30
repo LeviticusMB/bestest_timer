@@ -7,7 +7,7 @@ sv:
     recording: "(Loggar tid)"
 
     details: "Detaljer"
-    time: "Tid:"
+    time: "Spenderad tid:"
     project: "Projekt:"
     issue: "Ärende:"
 
@@ -15,9 +15,9 @@ sv:
 
     comment: "Kommentar"
 
-    close: "Stäng"
     commit: "Stämpla ut"
     discard: "Kasta"
+    close: "Stäng"
 
     logging_since: "Loggar tid till %{descr} sedan %{time}"
     notification_title: "Loggade %{hours} timmar till %{descr}"

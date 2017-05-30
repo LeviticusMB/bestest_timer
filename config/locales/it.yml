@@ -1,19 +1,30 @@
 # Italian strings go here for Rails i18n
 it:
   bestest_timer:
+    plugin_name: "Il miglior Orologio Segnatempo per Redmine"
+
+    start: "Registra tempo"
+    recording: "(Registrando)"
+
+    details: "Dettagli"
+    time: "Tempo impiegato:"
+    project: "Progetto:"
+    issue: "Segnalazione:"
+
     activity: "Attività"
-    close: "Chiudi"
+
     comment: "Commento"
+
     commit: "Fine registrazione"
     discard: "Annulla"
+    close: "Chiudi"
+
     logging_since: "Registrando tempo su %{descr} dalle %{time}"
+    notification_title: "Segnate %{hours} ore a %{descr}"
+    state_descr_issue: "%{project}, segnalazione #%{issue}"
+    state_descr: "%{project}"
+
     need_rest_api: "Per favore verificare che 'Abilita il servizio web REST' è\n abilitato in Amministrazione Redmine/Impostazioni/API"
     no_permission: "Non si dispone delle autorizzazioni necessarie per segnare il tempo al progetto %{project}."
     nothing_inferred: "Nessun progetto o segnalazione può essere dedotta dalla pagina corrente."
-    notification_title: "Segnate %{hours} ore a %{descr}"
-    plugin_name: "Il miglior Orologio Segnatempo per Redmine"
-    recording: "(Registrando)"
-    start: "Registra tempo"
-    state_descr_issue: "%{project}, segnalazione #%{issue}"
-    state_descr: "%{project}"
     submit_failed: "Non è stato possibile registrare il turno lavorativo su Redmine: %{error}"
