@@ -156,7 +156,7 @@ $(document).ready(function () {
 				$('<table/>').append(
 					$('<tr/>').append($('<td/>').text(t('time')), $('<td/>').text(timeComment(new Date()))),
 					$('<tr/>').append($('<td/>').text(t('project')), $('<td/>').html(state.project._lnk)),
-					state.issue && $('<tr/>').append($('<td/>').text(t('issue')), $('<td/>').html(state.issue._lnk)),
+					state.issue && $('<tr/>').append($('<td/>').text(t('issue')), $('<td/>').html(state.issue._lnk))
 				)
 			),
 			activities,
