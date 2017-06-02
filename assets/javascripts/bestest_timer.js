@@ -6,11 +6,11 @@ $(document).ready(function () {
 
 	var cleanState = {
 		started: null,
+		comment: null,
 		descr: null,
 		project: null,
 		issue: null,
 		activity: null,
-		comment: null,
 		activities: null,
 	};
 
@@ -27,6 +27,16 @@ $(document).ready(function () {
 
 	function loadState() {
 		state = JSON.parse(localStorage.getItem(stateKey) || JSON.stringify(cleanState));
+
+		// Migrate state from v1.0
+		if (typeof state.project === 'number') {
+			state.project = { id: state.project, _lnk: 'Project ' + state.project };
+		}
+
+		if (typeof state.issue === 'number') {
+			state.issue = { id: state.issue, _lnk: 'Issue #' + state.issue };
+		}
+
 		updateUI();
 	}
 
@@ -52,7 +62,11 @@ $(document).ready(function () {
 
 
 	function toTime(date) {
-		return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: 'numeric' });
+		return date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' });
+	}
+
+	function timeComment(stopped) {
+		return toTime(new Date(state.started)) + '–' + toTime(stopped);
 	}
 
 	function start() {
@@ -66,29 +80,32 @@ $(document).ready(function () {
 			alert(t('no_permission', { project: bestest_timer.project.name }));
 		}
 		else {
-			state.started = Date.now();
-			state.descr = t(bestest_timer.issue ? 'state_descr_issue' : 'state_descr', {
-				project: bestest_timer.project.name,
-				issue: bestest_timer.issue && bestest_timer.issue.id
-			});
-			state.project = bestest_timer.project.id;
-			state.issue = bestest_timer.issue && bestest_timer.issue.id;
-			state.activity = (bestest_timer.activities.filter(function (activity) { return activity.is_default; })[0] || { id: null }).id;
-			state.activities = bestest_timer.activities;
+			state = {
+				started:    Date.now(),
+				comment:    '',
+				descr:      t(bestest_timer.issue ? 'state_descr_issue' : 'state_descr', {
+								project: bestest_timer.project.name,
+								issue: bestest_timer.issue && bestest_timer.issue.id
+							}),
+				project:    $.extend({}, bestest_timer.project, { _lnk: bestest_timer.project_lnk }),
+				issue:      bestest_timer.issue && $.extend({}, bestest_timer.issue, { _lnk: bestest_timer.issue_lnk }),
+				activity:   (bestest_timer.activities.filter(function (activity) { return activity.is_default; })[0] || { id: null }).id,
+				activities: bestest_timer.activities,
+			}
 			saveState();
 		}
 	}
 
 	function commit() {
 		var stopped = new Date();
-		var comment = ((state.comment || '') + ' [' + toTime(new Date(state.started)) + '-' + toTime(stopped) + ']').trim();
+		var comment = (state.comment + ' [' + timeComment(stopped) + ']').trim();
 
 		$.ajax(bestest_timer.timelog_url, {
 			method: 'POST',
 			data: JSON.stringify({
 				time_entry: {
-					project_id: state.project,
-					issue_id: state.issue,
+					project_id: state.project.id,
+					issue_id: state.issue && state.issue.id,
 					activity_id: state.activity,
 					hours: (stopped - state.started) / 1000 / 60 / 60,
 					comments: comment,
@@ -119,48 +136,63 @@ $(document).ready(function () {
 			dialog.dialog('destroy');
 		}
 
-		var form = $('<form/>').submit(false);
-		var fieldset = $('<fieldset>').append($('<legend/>').text(button.attr('title'))).appendTo(form);
-		var select = $('<select id="bestest_timer_activity"/>')
-			.change(function () {
-				state.activity = Number(this.value);
-			});
-
-		if (!state.activity) {
-			$('<option/>').appendTo(select);
-		}
+		var form       = $('<form/>').submit(false);
+		var activities = $('<fieldset>').append($('<legend/>').text(t('activity')));
+		var labels     = $('<div>', { "class": "bestest_timer_activities" }).appendTo(activities);
 
 		state.activities.forEach(function (activity) {
-			$('<option/>', { value: activity.id, selected: activity.id === state.activity }).text(activity.name).appendTo(select);
+			$('<label/>')
+				.append($('<input/>', { type: 'radio', name: 'activity', value: activity.id, checked: activity.id === state.activity })
+					.click(function() {
+						state.activity = Number(this.value);
+					})
+				)
+				.append(document.createTextNode(activity.name))
+				.appendTo(labels);
 		});
 
 		[
-			$('<label for="bestest_timer_activity"></label>').text(t('activity')),
-			select,
-			$('<label for="bestest_timer_comment"></label>').text(t('comment')),
-			$('<input id="bestest_timer_comment" type="text" size="50" autocomplete="off" autofocus />').attr('value', state.comment)
-				.change(function () {
-					state.comment = this.value;
-				})
-				.keyup(function(event) {
-					if (event.keyCode === 13) {
-						commit();
-						dialog.dialog('close');
-					}
-				}),
+			$('<fieldset/>').append($('<legend/>').text(t('details'))).append(
+				$('<table/>').append(
+					$('<tr/>').append($('<td/>').text(t('time')), $('<td/>').text(timeComment(new Date()))),
+					$('<tr/>').append($('<td/>').text(t('project')), $('<td/>').html(state.project._lnk)),
+					state.issue && $('<tr/>').append($('<td/>').text(t('issue')), $('<td/>').html(state.issue._lnk))
+				)
+			),
+			activities,
+			$('<fieldset/>').append($('<legend/>').text(t('comment'))).append(
+				$('<input id="bestest_timer_comment" type="text" autocomplete="off" autofocus />').attr('value', state.comment)
+					.change(function () {
+						state.comment = this.value;
+					})
+					.keyup(function (event) {
+						if (event.keyCode === 13) {
+							commit();
+							dialog.dialog('close');
+						}
+					})
+			)
 		].forEach(function (elem) {
-			fieldset.append(elem);
+			form.append(elem);
 		});
 
 		dialog = form.dialog({
 			dialogClass: 'bestest_timer_dialog',
 			position: { my: 'right top', at: 'right bottom', of: button },
-			width: 400,
+			width: 450,
 			draggable: false,
 			modal: true,
 			hide: 200,
 			show: 200,
 			title: t('plugin_name'),
+
+			open: function() { // Hack to remove black line in Safari
+				if (/Apple/.test(window.navigator.vendor)) {
+					$('.bestest_timer_dialog').each(function(idx, elem) {
+						elem.style.background = window.getComputedStyle(elem).backgroundColor;
+					});
+				}
+			},
 
 			buttons: [
 				{

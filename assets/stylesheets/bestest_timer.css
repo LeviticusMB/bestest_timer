@@ -6,10 +6,25 @@
     border-radius: 3px;
 }
 
-.bestest_timer_dialog label, .bestest_timer_dialog input {
+.bestest_timer_dialog .ui-dialog-titlebar-close {
+    display: none;
+}
+
+.bestest_timer_activities {
+    -moz-column-count: 2;
+    -webkit-column-count: 2;
+    column-count: 2;
+}
+
+.bestest_timer_activities label {
     display: block;
 }
 
-.bestest_timer_dialog .ui-dialog-titlebar-close {
-  display: none;
+.bestest_timer_dialog td {
+    vertical-align: top;
+}
+
+.bestest_timer_dialog input[type='text'] {
+    width: 100%;
+    box-sizing: border-box;
 }
