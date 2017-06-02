@@ -14,3 +14,10 @@ And that's all there is to it.
 ```bash
   git clone https://github.com/LeviticusMB/bestest_timer.git
 ```
+
+# Upgrade to latest stable release
+
+`cd` into the `redmine/plugins` folder and run:
+```bash
+  git pull
+```
