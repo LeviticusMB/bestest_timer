@@ -131,6 +131,12 @@ $(document).ready(function () {
 		clearState();
 	}
 
+	function enableOrDisableCommit() {
+		var disabled = !state.activity;
+
+		$('#bestest_timer_commit').attr('disabled', disabled).toggleClass('ui-state-disabled', disabled);
+	}
+
 	function openDialog() {
 		if (dialog) {
 			dialog.dialog('destroy');
@@ -138,13 +144,14 @@ $(document).ready(function () {
 
 		var form       = $('<form/>').submit(false);
 		var activities = $('<fieldset>').append($('<legend/>').text(t('activity')));
-		var labels     = $('<div>', { "class": "bestest_timer_activities" }).appendTo(activities);
+		var labels     = $('<div>', { 'class': 'bestest_timer_activities' }).appendTo(activities);
 
 		state.activities.forEach(function (activity) {
 			$('<label/>')
 				.append($('<input/>', { type: 'radio', name: 'activity', value: activity.id, checked: activity.id === state.activity })
 					.click(function() {
 						state.activity = Number(this.value);
+						enableOrDisableCommit();
 					})
 				)
 				.append(document.createTextNode(activity.name))
@@ -192,11 +199,13 @@ $(document).ready(function () {
 						elem.style.background = window.getComputedStyle(elem).backgroundColor;
 					});
 				}
+
+				enableOrDisableCommit();
 			},
 
 			buttons: [
 				{
-					text: t('commit'), icons: { primary: 'ui-icon-clock' }, click: function () {
+					text: t('commit'), icons: { primary: 'ui-icon-clock' }, id: 'bestest_timer_commit', click: function () {
 						commit();
 						dialog.dialog('close');
 					}
