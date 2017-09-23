@@ -1,0 +1,32 @@
+# German strings go here for Rails i18n
+de:
+  bestest_timer:
+    # Please don't forget to translate the plugin name. ("Bestest" is "better than the best" in a grammatically incorrect way.)
+    plugin_name: "Die besteste Stempeluhr für Redmine"
+
+    start: "Uhr starten"
+    recording: "(Aufzeichnung)"
+
+    details: "Details"
+    time: "Zeit:"
+    project: "Projekt:"
+    issue: "Ticket:"
+
+    activity: "Aktivität"
+
+    comment: "Kommentar"
+
+    commit: "Buchen"
+    discard: "Verwerfen"
+    close: "Beenden"
+
+    logging_since: "Buchung auf %{descr} seit %{time}"
+    notification_title: "%{hours} Stunden zu %{descr} gebucht"
+    state_descr_issue: "%{project}, Ticket #%{issue}"
+    state_descr: "%{project}"
+
+    need_rest_api: "Bitte prüfen Sie ob 'REST-Schnittstelle aktivieren' in Redmine unter Administration/Konfiguration/API aktiviert ist."
+    no_permission: "Sie haben keine Berechtigungen Zeit auf %{project} zu buchen."
+    not_enabled: "Time tracking not enabled for %{project}."
+    nothing_inferred: "Weder das Projekt noch das Ticket konnte von der aktuellen Seite abgeleitet werden."
+    submit_failed: "Fehler beim Buchen zu Redmine: %{error}"
