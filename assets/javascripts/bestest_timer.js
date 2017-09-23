@@ -20,9 +20,31 @@ $(document).ready(function () {
 	var dialog   = null;
 
 	function updateUI() {
-		button.text(state.started ? t('recording') : t('start'))
-			.attr('title',
-			state.started ? t('logging_since', { descr: state.descr, time: toTime(new Date(state.started)) }) : null);
+		var enabled = false;
+		var title   = null;
+
+		if (state.started) {
+			enabled = true;
+			title   = t('logging_since', { descr: state.descr, time: toTime(new Date(state.started)) });
+		}
+		if (!bestest_timer.api_key) {
+			title = t('need_rest_api');
+		}
+		else if (!bestest_timer.project && !bestest_timer.issue) {
+			title = t('nothing_inferred');
+		}
+		else if (!bestest_timer.activities) {
+			title = t('not_enabled',  { project: bestest_timer.project.name });
+		}
+		else if (!bestest_timer.access) {
+			title = t('no_permission', { project: bestest_timer.project.name });
+		}
+		else {
+			enabled = true;
+		}
+
+		button.text(state.started ? t('recording') : t('start')).attr('title', title).attr('disabled', !enabled);
+
 	}
 
 	function loadState() {
@@ -75,6 +97,9 @@ $(document).ready(function () {
 		}
 		else if (!bestest_timer.project && !bestest_timer.issue) {
 			alert(t('nothing_inferred'));
+		}
+		else if (!bestest_timer.activities) {
+			alert(t('not_enabled',  { project: bestest_timer.project.name }));
 		}
 		else if (!bestest_timer.access) {
 			alert(t('no_permission', { project: bestest_timer.project.name }));

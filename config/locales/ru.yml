@@ -1,6 +1,7 @@
 # Russian strings go here for Rails i18n
 ru:
   bestest_timer:
+    # Please don't forget to translate the plugin name. ("Bestest" is "better than the best" in a grammatically incorrect way.)
     plugin_name: "Учет времени"
 
     start: "Запустить учет времени"
@@ -26,5 +27,6 @@ ru:
 
     need_rest_api: "Пожалуйста, проверьте, что опция 'Включить веб-сервис REST'' активирована — администрирование/Настройки/API."
     no_permission: "У вас нет разрешений для учета времени в проекте %{project}."
+    not_enabled: "Time tracking not enabled for %{project}."
     nothing_inferred: "Нужно выбрать задачу или проект, чтобы запустить учет времени"
     submit_failed: "Не удалось учесть время: %{error}"

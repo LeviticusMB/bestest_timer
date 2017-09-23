@@ -1,6 +1,7 @@
 # Simplified Chinese strings go here for Rails i18n
 zh:
   bestest_timer:
+    # Please don't forget to translate the plugin name. ("Bestest" is "better than the best" in a grammatically incorrect way.)
     plugin_name: "Redmine任务计时登记工具"
 
     start: "计时开始"
@@ -26,5 +27,6 @@ zh:
 
     need_rest_api: "请确认是否启用了REST web service（路径：管理 - 配置 - API）"
     no_permission: "您没有在%{project} 项目中计时登记的权限。"
+    not_enabled: "Time tracking not enabled for %{project}."
     nothing_inferred: "当前页不包含项目或任务信息。"
     submit_failed: "无法将工时登记到Redmine：%{error}"

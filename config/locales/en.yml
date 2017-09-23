@@ -1,6 +1,7 @@
 # English strings go here for Rails i18n
 en:
   bestest_timer:
+    # Please don't forget to translate the plugin name. ("Bestest" is "better than the best" in a grammatically incorrect way.)
     plugin_name: "Bestest Punch Clock for Redmine"
 
     start: "Punch in"
@@ -26,5 +27,6 @@ en:
 
     need_rest_api: "Please check that 'Enable REST web service' is\nenabled in Redmine Administration/Settings/API."
     no_permission: "You do not have permission to log time to %{project}."
+    not_enabled: "Time tracking not enabled for %{project}."
     nothing_inferred: "Neither project nor issue could be inferred from current page."
     submit_failed: "Failed to log work shift to Redmine: %{error}"

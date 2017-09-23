@@ -1,6 +1,7 @@
 # Italian strings go here for Rails i18n
 it:
   bestest_timer:
+    # Please don't forget to translate the plugin name. ("Bestest" is "better than the best" in a grammatically incorrect way.)
     plugin_name: "Il miglior Orologio Segnatempo per Redmine"
 
     start: "Registra tempo"
@@ -26,5 +27,6 @@ it:
 
     need_rest_api: "Per favore verificare che 'Abilita il servizio web REST' è\n abilitato in Amministrazione Redmine/Impostazioni/API"
     no_permission: "Non si dispone delle autorizzazioni necessarie per segnare il tempo al progetto %{project}."
+    not_enabled: "Time tracking not enabled for %{project}."
     nothing_inferred: "Nessun progetto o segnalazione può essere dedotta dalla pagina corrente."
     submit_failed: "Non è stato possibile registrare il turno lavorativo su Redmine: %{error}"

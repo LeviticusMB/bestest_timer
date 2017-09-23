@@ -1,6 +1,7 @@
 # Swedish strings go here for Rails i18n
 sv:
   bestest_timer:
+    # Please don't forget to translate the plugin name. ("Bestest" is "better than the best" in a grammatically incorrect way.)
     plugin_name: "Bästaste stämpelklockan för Redmine"
 
     start: "Stämpla in"
@@ -26,5 +27,6 @@ sv:
 
     need_rest_api: "Vänligen säkerställ att 'Aktivera REST webbtjänst' är\npåslaget i Redmines Administration/Inställningar/API."
     no_permission: "Du har inte rättighet att logga tid till %{project}."
+    not_enabled: "Tidsuppföljning är inte aktiverat för %{project}."
     nothing_inferred: "Varken projekt eller ärende kunde räknas ut från nuvarande sida."
     submit_failed: "Misslyckades med att skicka arbetspass till Redmine: %{error}"
