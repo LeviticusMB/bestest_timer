@@ -16,9 +16,9 @@ $(document).ready(function () {
 		nagged: null,
 	};
 
-	var idleStartThreshold = 1 * 60;
-	var idleStopThreshold  = 3 * 60;
-	var idleUserThreshold  = 3 * 60;
+	var idleStartThreshold = 10 * 60;
+	var idleStopThreshold  = 30 * 60;
+	var idleUserThreshold  = 30 * 60;
 
 	var userLastSeen = Date.now();
 
