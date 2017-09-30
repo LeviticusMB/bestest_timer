@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
 	if (!window.bestest_timer) {
 		return;
@@ -16,9 +15,11 @@ $(document).ready(function () {
 		nagged: null,
 	};
 
-	var idleStartThreshold = 10 * 60;
-	var idleStopThreshold  = 30 * 60;
-	var idleUserThreshold  = 30 * 60;
+	var beta = localStorage.getItem('bestest_timer') === 'beta';
+
+	var idleStartThreshold =  5 * 60;
+	var idleStopThreshold  = 45 * 60;
+	var idleSleepThreshold = 30 * 60;
 
 	var userLastSeen = Date.now();
 
@@ -81,7 +82,7 @@ $(document).ready(function () {
 		updateUI();
 	}
 
-	$(window).bind('storage', function(event) {
+	$(window).bind('storage', function (event) {
 		if (event.originalEvent.key === stateKey) {
 			loadState();
 
@@ -100,7 +101,7 @@ $(document).ready(function () {
 	}
 
 	function activityDetected(ts) {
-		if (!state.nagged /* Once we've nagged once, leave lastActivity as-is */) {
+		if (ts || !state.nagged /* Once we've nagged once, leave lastActivity as-is, unless forced */) {
 			state.lastActivity = ts || Date.now();
 			saveState();
 			console.log("Activity detected at " + new Date(state.lastActivity));
@@ -110,22 +111,22 @@ $(document).ready(function () {
 	function checkIdleTimeout() {
 		var now = Date.now();
 
-		if (state.nagged)  {
-			return;
-		}
-
 		// User idle handling
+
 		var idle = (now - userLastSeen) / 1000;
 
-		if (!state.lastActivity || !state.started && idle > idleUserThreshold) {
-			// Once user has been idle idleUserThreshold sec and is *not* working, set activity to time when user returns
-			console.log("Not working checkpoint");
+		if (!state.lastActivity) {
 			activityDetected();
 		}
-		else if (state.started && idle > idleUserThreshold) {
-			// Once user has been idle idleUserThreshold sec and *is* working, set activity to time when user left
-			console.log("Is working checkpoint");
-			activityDetected(userLastSeen)
+		else if (idle > idleSleepThreshold) {
+			console.log("User is idle");
+
+			// Force select-time dialog when if has been idle idleSleepThreshold sec
+			state.nagged = state.nagged ? true : null;
+
+			// * Once user is *not* working, set activity to time when user returns
+			// * Once user *is* working, set activity to time when user left
+			activityDetected(state.started ? userLastSeen : Date.now());
 		}
 
 		// Activity reminder handling
@@ -133,19 +134,29 @@ $(document).ready(function () {
 
 		console.log(`Last activity: ${delta} sec ago. User last seen ${idle} sec ago`);
 
-		if (state.started && delta > idleStopThreshold) {
-			console.warn/*displayNotification*/(t('should_punch_out_title'), t('should_punch_out_message', { time: delta }), null);
+		if (!state.nagged &&state.started && delta > idleStopThreshold) {
 			state.nagged = now;
 			saveState();
+
+			beta && displayNotification(t('should_punch_out_title'), t('should_punch_out_message', { descr: state.descr, minutes: Math.round(delta) }), function () {
+				state.nagged = true; // Force select-time dialog
+				saveState();
+
+				openDialog();
+			});
 		}
-		else if (!state.started && idle < 60 && delta > idleStartThreshold) {
-			console.warn/*displayNotification*/(t('should_punch_in_title'), t('should_punch_in_message', { time: delta }), null);
+		else if (!state.nagged && !state.started && idle < 60 /* not idle */ && delta > idleStartThreshold) {
 			state.nagged = now;
 			saveState();
+
+			beta && displayNotification(t('should_punch_in_title'), t('should_punch_in_message', { minutes: Math.round(delta) }), function () {
+				state.nagged = true; // Force select-time dialog
+				saveState();
+			});
 		}
 	}
 
-	function start() {
+	function start(ts) {
 		if (!bestest_timer.api_key) {
 			alert(t('need_rest_api'));
 		}
@@ -159,8 +170,14 @@ $(document).ready(function () {
 			alert(t('no_permission', { project: bestest_timer.project.name }));
 		}
 		else {
+			if (!ts && state.lastActivity && (state.nagged === true || state.nagged && Date.now() - state.nagged < 60 * 1000 /* Recently nagged */)) {
+				if (beta && confirm(t('use_last_activity_time', { time: toTime(new Date(state.lastActivity)) }))) {
+					ts = state.lastActivity;
+				}
+			}
+
 			state = {
-				started:      Date.now(),
+				started:      ts || Date.now(),
 				comment:      '',
 				descr:        t(bestest_timer.issue ? 'state_descr_issue' : 'state_descr', {
 				                project: bestest_timer.project.name,
@@ -177,8 +194,14 @@ $(document).ready(function () {
 		}
 	}
 
-	function commit() {
-		var stopped = Date.now();
+	function commit(ts) {
+		if (!ts && state.lastActivity && (state.nagged === true || state.nagged && Date.now() - state.nagged < 60 * 1000 /* Recently nagged */)) {
+			if (beta && confirm(t('use_last_activity_time', { time: toTime(new Date(state.lastActivity)) }))) {
+				ts = state.lastActivity;
+			}
+		}
+
+		var stopped = ts || Date.now();
 		var comment = (state.comment + ' [' + timeComment(stopped) + ']').trim();
 
 		$.ajax(bestest_timer.timelog_url, {
@@ -198,8 +221,10 @@ $(document).ready(function () {
 			},
 		})
 		.done(function (response) {
-			var te = response.time_entry;
-			displayNotification(t('notification_title', { hours: te.hours, descr: state.descr }), te.comments, te.id);
+			displayNotification(t('notification_title', { hours: response.time_entry.hours, descr: state.descr }), response.time_entry.comments, function () {
+				window.location.href = bestest_timer.timelog_idx.replace('XXX', response.time_entry.id);
+			});
+
 			clearState();
 		})
 		.fail(function ($xhr) {
@@ -224,7 +249,7 @@ $(document).ready(function () {
 		state.activities.forEach(function (activity) {
 			$('<label/>')
 				.append($('<input/>', { type: 'radio', name: 'activity', value: activity.id, checked: activity.id === state.activity })
-					.click(function() {
+					.click(function () {
 						state.activity = Number(this.value);
 						enableOrDisableCommit();
 					})
@@ -268,9 +293,9 @@ $(document).ready(function () {
 			show: 200,
 			title: t('plugin_name'),
 
-			open: function() { // Hack to remove black line in Safari
+			open: function () { // Hack to remove black line in Safari
 				if (/Apple/.test(window.navigator.vendor)) {
-					$('.bestest_timer_dialog').each(function(idx, elem) {
+					$('.bestest_timer_dialog').each(function (idx, elem) {
 						elem.style.background = window.getComputedStyle(elem).backgroundColor;
 					});
 				}
@@ -318,30 +343,28 @@ $(document).ready(function () {
 		$('#bestest_timer_commit').attr('disabled', disabled).toggleClass('ui-state-disabled', disabled);
 	}
 
-	function displayNotification(title, message, idx) {
+	function displayNotification(title, message, onClickHandler) {
 		if (!window.Notification) {
-			alert(title + ': ' + message);
+			if (confirm(title + ': ' + message) && onClickHandler) {
+				onClickHandler();
+			}
 		}
 		else if (Notification.permission === 'granted') {
 			var entry = new Notification(title, { body: message });
 
-			if (idx) {
-				$(entry).click(function () {
-					window.location.href = bestest_timer.timelog_idx.replace('XXX', idx);
-				});
-			}
+			onClickHandler && $(entry).click(onClickHandler);
 		}
 		else if (Notification.permission !== 'denied') {
 			Notification.requestPermission(function (permission) {
 				if (permission === 'granted') {
-					displayNotification(title, message, idx);
+					displayNotification(title, message, onClickHandler);
 				}
 			});
 		}
 	}
 
 	function t(key, props) {
-		return (bestest_timer.lang[key] || key).replace(/%{([^}]+)}/g, function(_, prop) {
+		return (bestest_timer.lang[key] || key).replace(/%{([^}]+)}/g, function (_, prop) {
 			return String(Object(props)[prop]);
 		});
 	}
@@ -363,7 +386,7 @@ $(document).ready(function () {
 
 	setInterval(checkIdleTimeout, 10000);
 
-	document.addEventListener && document.addEventListener("visibilitychange", function() {
+	document.addEventListener && document.addEventListener('visibilitychange', function () {
 		document.hidden || userDetected();
 	}, false);
 
