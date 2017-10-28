@@ -161,7 +161,24 @@ $(document).ready(function () {
 		[
 			$('<fieldset/>').append($('<legend/>').text(t('details'))).append(
 				$('<table/>').append(
-					$('<tr/>').append($('<td/>').text(t('time')), $('<td/>').text(timeComment(new Date()))),
+					$('<tr/>').append($('<td/>').text(t('time')), $('<td/>').append(
+						$('<input id="bestest_timer_start_hours" class="bestest_timer_start" type="text"/>')
+							.attr('value', (new Date(state.started)).getHours())
+							.change(function () {
+								var date = new Date(state.started);
+								date.setHours(parseInt(this.value));
+								state.started = date.getTime();
+							}),
+						' : ',
+						$('<input id="bestest_timer_start_minutes" class="bestest_timer_start" type="text"/>')
+							.attr('value', (new Date(state.started)).getMinutes())
+							.change(function () {
+								var date = new Date(state.started);
+								date.setMinutes(parseInt(this.value));
+								state.started = date.getTime();
+							}),
+						' – ' + toTime(new Date())
+					)),
 					$('<tr/>').append($('<td/>').text(t('project')), $('<td/>').html(state.project._lnk)),
 					state.issue && $('<tr/>').append($('<td/>').text(t('issue')), $('<td/>').html(state.issue._lnk))
 				)
