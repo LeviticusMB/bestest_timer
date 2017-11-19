@@ -135,7 +135,7 @@ $(document).ready(function () {
 			state.nagged = now;
 			saveState();
 
-			beta && displayNotification(t('should_punch_out_title'), t('should_punch_out_message', { descr: state.descr, minutes: Math.round(delta) }), function () {
+			beta && displayNotification(t('should_punch_out_title'), t('should_punch_out_message', { descr: state.descr, time: toTime(state.lastActivity) }), function () {
 				openDialog();
 			});
 		}
@@ -143,7 +143,7 @@ $(document).ready(function () {
 			state.nagged = now;
 			saveState();
 
-            beta && displayNotification(t('should_punch_in_title'), t('should_punch_in_message', { minutes: Math.round(delta) }));
+			beta && displayNotification(t('should_punch_in_title'), t('should_punch_in_message', { time: toTime(state.lastActivity) }));
 		}
 	}
 

@@ -22,9 +22,9 @@ sv:
 
     logging_since: "Loggar tid till %{descr} sedan %{time}"
     notification_title: "Loggade %{hours} timmar till %{descr}"
-    should_punch_in_message: "Du syntes senast till för %{minutes} minuter sedan."
+    should_punch_in_message: "Du syntes senast till klockan %{time}."
     should_punch_in_title: "Glöm inte att stämpla in!"
-    should_punch_out_message: "Du har inte synts till på %{minutes} minuter, men loggar fortfarande tid till %{descr}."
+    should_punch_out_message: "Du har inte synts till sedan %{time}, men loggar fortfarande tid till %{descr}."
     should_punch_out_title: "Jobbar du fortfarande?"
     state_descr_issue: "%{project}, ärende #%{issue}"
     state_descr: "%{project}"

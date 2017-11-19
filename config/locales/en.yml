@@ -22,9 +22,9 @@ en:
 
     logging_since: "Logging to %{descr} since %{time}"
     notification_title: "Logged %{hours} hours to %{descr}"
-    should_punch_in_message: "You were last seen %{minutes} minutes ago."
+    should_punch_in_message: "You were last seen at %{time}."
     should_punch_in_title: "Don't forget to punch in!"
-    should_punch_out_message: "You have not been seen for %{minutes} minutes, but are still logging time to %{descr}."
+    should_punch_out_message: "You have not been seen since %{time}, but are still logging time to %{descr}."
     should_punch_out_title: "Still working?"
     state_descr_issue: "%{project}, issue #%{issue}"
     state_descr: "%{project}"
