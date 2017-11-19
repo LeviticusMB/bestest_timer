@@ -28,7 +28,6 @@ en:
     should_punch_out_title: "Still working?"
     state_descr_issue: "%{project}, issue #%{issue}"
     state_descr: "%{project}"
-    use_last_activity_time: "Use saved time for last activity (%{time})?"
 
     need_rest_api: "Please check that 'Enable REST web service' is\nenabled in Redmine Administration/Settings/API."
     no_permission: "You do not have permission to log time to %{project}."

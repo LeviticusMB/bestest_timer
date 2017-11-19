@@ -121,9 +121,6 @@ $(document).ready(function () {
 		else if (idle > idleSleepThreshold) {
 			console.log("User is idle");
 
-			// Force select-time dialog when if has been idle idleSleepThreshold sec
-			state.nagged = state.nagged ? true : null;
-
 			// * Once user is *not* working, set activity to time when user returns
 			// * Once user *is* working, set activity to time when user left
 			activityDetected(state.started ? userLastSeen : Date.now());
@@ -139,9 +136,6 @@ $(document).ready(function () {
 			saveState();
 
 			beta && displayNotification(t('should_punch_out_title'), t('should_punch_out_message', { descr: state.descr, minutes: Math.round(delta) }), function () {
-				state.nagged = true; // Force select-time dialog
-				saveState();
-
 				openDialog();
 			});
 		}
@@ -149,14 +143,11 @@ $(document).ready(function () {
 			state.nagged = now;
 			saveState();
 
-			beta && displayNotification(t('should_punch_in_title'), t('should_punch_in_message', { minutes: Math.round(delta) }), function () {
-				state.nagged = true; // Force select-time dialog
-				saveState();
-			});
+            beta && displayNotification(t('should_punch_in_title'), t('should_punch_in_message', { minutes: Math.round(delta) }));
 		}
 	}
 
-	function start(ts) {
+	function start() {
 		if (!bestest_timer.api_key) {
 			alert(t('need_rest_api'));
 		}
@@ -170,14 +161,8 @@ $(document).ready(function () {
 			alert(t('no_permission', { project: bestest_timer.project.name }));
 		}
 		else {
-			if (!ts && state.lastActivity && (state.nagged === true || state.nagged && Date.now() - state.nagged < 60 * 1000 /* Recently nagged */)) {
-				if (beta && confirm(t('use_last_activity_time', { time: toTime(new Date(state.lastActivity)) }))) {
-					ts = state.lastActivity;
-				}
-			}
-
 			state = {
-				started:      ts || Date.now(),
+				started:      Date.now(),
 				comment:      '',
 				descr:        t(bestest_timer.issue ? 'state_descr_issue' : 'state_descr', {
 				                project: bestest_timer.project.name,
@@ -194,14 +179,7 @@ $(document).ready(function () {
 		}
 	}
 
-	function commit(ts) {
-		if (!ts && state.lastActivity && (state.nagged === true || state.nagged && Date.now() - state.nagged < 60 * 1000 /* Recently nagged */)) {
-			if (beta && confirm(t('use_last_activity_time', { time: toTime(new Date(state.lastActivity)) }))) {
-				ts = state.lastActivity;
-			}
-		}
-
-		var stopped = ts || Date.now();
+	function commit(stopped) {
 		var comment = (state.comment + ' [' + timeComment(stopped) + ']').trim();
 
 		$.ajax(bestest_timer.timelog_url, {
@@ -293,6 +271,7 @@ $(document).ready(function () {
 							state.started = updateTime(state.started, 'bestest_timer_start');
 							commit(updateTime(Date.now(), 'bestest_timer_stop'));
 							dialog.dialog('close');
+							activityDetected();
 						}
 					})
 			)

@@ -28,7 +28,6 @@ sv:
     should_punch_out_title: "Jobbar du fortfarande?"
     state_descr_issue: "%{project}, ärende #%{issue}"
     state_descr: "%{project}"
-    use_last_activity_time: "Använd sparad tid för senaste aktivitet (%{time})?"
 
     need_rest_api: "Vänligen säkerställ att 'Aktivera REST webbtjänst' är\npåslaget i Redmines Administration/Inställningar/API."
     no_permission: "Du har inte rättighet att logga tid till %{project}."
