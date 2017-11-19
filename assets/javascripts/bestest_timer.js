@@ -261,7 +261,23 @@ $(document).ready(function () {
 		[
 			$('<fieldset/>').append($('<legend/>').text(t('details'))).append(
 				$('<table/>').append(
-					$('<tr/>').append($('<td/>').text(t('time')), $('<td/>').text(timeComment(Date.now()))),
+					$('<tr/>').append($('<td/>').text(t('time')), $('<td/>').append(
+						$('<input id="bestest_timer_start" type="time" pattern="[0-9]{2}:[0-9]{2}" size="5"/>')
+							.attr('value', toTime(new Date(state.started)))
+							.on('input', function () {
+								if (!this.value) {
+									this.value = toTime(new Date(state.started));
+								}
+							}),
+						'–',
+						$('<input id="bestest_timer_stop" type="time" pattern="[0-9]{2}:[0-9]{2}" size="5"/>')
+							.attr('value', toTime(new Date()))
+							.on('input', function () {
+								if (!this.value) {
+									this.value = toTime(new Date());
+								}
+							})
+					)),
 					$('<tr/>').append($('<td/>').text(t('project')), $('<td/>').html(state.project._lnk)),
 					state.issue && $('<tr/>').append($('<td/>').text(t('issue')), $('<td/>').html(state.issue._lnk))
 				)
@@ -274,7 +290,8 @@ $(document).ready(function () {
 					})
 					.keyup(function (event) {
 						if (event.keyCode === 13) {
-							commit();
+							state.started = updateTime(state.started, 'bestest_timer_start');
+							commit(updateTime(Date.now(), 'bestest_timer_stop'));
 							dialog.dialog('close');
 						}
 					})
@@ -306,7 +323,8 @@ $(document).ready(function () {
 			buttons: [
 				{
 					text: t('commit'), icons: { primary: 'ui-icon-clock' }, id: 'bestest_timer_commit', click: function () {
-						commit();
+						state.started = updateTime(state.started, 'bestest_timer_start');
+						commit(updateTime(Date.now(), 'bestest_timer_stop'));
 						dialog.dialog('close');
 						activityDetected();
 					}
@@ -320,6 +338,7 @@ $(document).ready(function () {
 				},
 				{
 					text: t('close'), icons: { primary: 'ui-icon-close' }, click: function () {
+						state.started = updateTime(state.started, 'bestest_timer_start');
 						saveState();
 						dialog.dialog('close');
 						activityDetected();
@@ -341,6 +360,19 @@ $(document).ready(function () {
 		var disabled = !state.activity;
 
 		$('#bestest_timer_commit').attr('disabled', disabled).toggleClass('ui-state-disabled', disabled);
+	}
+
+	function updateTime(ts, input) {
+		var hhmm = /^([0-9]{2}):([0-9]{2})$/.exec(document.getElementById(input).value);
+
+		if (hhmm) {
+			var date = new Date(ts);
+			date.setHours(hhmm[1]);
+			date.setMinutes(hhmm[2]);
+			ts = date.getTime();
+		}
+
+		return ts;
 	}
 
 	function displayNotification(title, message, onClickHandler) {
