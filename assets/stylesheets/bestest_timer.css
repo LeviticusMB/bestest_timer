@@ -35,3 +35,7 @@
     margin-top: -2px;
     text-align: center;
 }
+
+.bestest_timer_dialog input:invalid {
+    background-color: pink;
+}
