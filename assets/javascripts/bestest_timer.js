@@ -180,7 +180,7 @@ $(document).ready(function () {
 	}
 
 	function commit(stopped) {
-		var comment = (state.comment + ' [' + timeComment(stopped) + ']').trim();
+		var comment = timeComment(state.comment, state.started, stopped);
 
 		$.ajax(bestest_timer.timelog_url, {
 			method: 'POST',
@@ -333,8 +333,32 @@ $(document).ready(function () {
 		return date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' });
 	}
 
-	function timeComment(stopped) {
-		return toTime(state.started) + '–' + toTime(stopped);
+	function timeComment(comment, started, stopped) {
+		return (comment + ' [' + toTime(started) + '–' + toTime(stopped) + ']').trim();
+	}
+
+	function parseTime(time) {
+		var parsed = /^(\d*(\.\d+)?)$|^((\d+)[:h])?((\d+)m?)?$/.exec(time);
+
+		return parsed && parsed[1] ? parseFloat(parsed[1]) :
+			   parsed ? parseInt(parsed[4] || 0) + parseInt(parsed[5] || 0) / 60 :
+			   null;
+	}
+
+	function parseTimeComment(comment, refdate) {
+		refdate = refdate || Date.now();
+
+		function toTimestamp(hours) {
+			return new Date(refdate).setHours(0, hours * 60, 0, 0);
+		}
+
+		var timecomment = /(.*)\[([0-9]{2}:[0-9]{2})[-–]([0-9]{2}:[0-9]{2})\]\s*$/.exec(comment);
+
+		return timecomment && {
+			comment: timecomment[1].trim(),
+			started: toTimestamp(parseTime(timecomment[2])),
+			stopped: toTimestamp(parseTime(timecomment[3]))
+		};
 	}
 
 	function enableOrDisableCommit() {
@@ -382,6 +406,8 @@ $(document).ready(function () {
 		});
 	}
 
+	// Insert punch button
+
 	button.click(function () {
 		if (!state.started) {
 			start();
@@ -397,10 +423,14 @@ $(document).ready(function () {
 
 	$('#quick-search').append(button);
 
+	// Activate nag requesters
+
 	setInterval(checkIdleTimeout, 10000);
 
 	document.addEventListener && document.addEventListener('visibilitychange', function () {
-		document.hidden || userDetected();
+		if (!document.hidden) {
+			userDetected();
+		}
 	}, false);
 
 	$(window).focus(userDetected);
@@ -408,4 +438,28 @@ $(document).ready(function () {
 	$(window).click(userDetected);
 	$(window).scroll(userDetected);
 	$(window).mousemove(userDetected);
+
+	// Curry "Edit time" fields
+
+	var time_entry_hours    = $('form.edit_time_entry input#time_entry_hours');
+	var time_entry_comments = $('form.edit_time_entry input#time_entry_comments');
+
+	if (time_entry_hours.length == 1 && time_entry_comments.length == 1) {
+		time_entry_hours.on('input', function() {
+			var hr = parseTime(this.value)
+			var tc = parseTimeComment(time_entry_comments.val());
+
+			if (hr !== null && tc) {
+				time_entry_comments.val(timeComment(tc.comment, tc.started, tc.started + hr * 3600000));
+			}
+		});
+
+		time_entry_comments.on('input', function() {
+			var tc = parseTimeComment(this.value);
+
+			if (tc) {
+				time_entry_hours.val(((tc.stopped - tc.started) / 3600000).toFixed(2));
+			}
+		});
+	}
 });
