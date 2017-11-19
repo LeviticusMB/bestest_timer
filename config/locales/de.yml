@@ -22,6 +22,10 @@ de:
 
     logging_since: "Buchung auf %{descr} seit %{time}"
     notification_title: "%{hours} Stunden zu %{descr} gebucht"
+    should_punch_in_message: "You were last seen at %{time}."
+    should_punch_in_title: "Don't forget to punch in!"
+    should_punch_out_message: "You have not been seen since %{time}, but are still logging time to %{descr}."
+    should_punch_out_title: "Still working?"
     state_descr_issue: "%{project}, Ticket #%{issue}"
     state_descr: "%{project}"
 

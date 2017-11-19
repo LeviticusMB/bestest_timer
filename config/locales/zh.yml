@@ -22,6 +22,10 @@ zh:
 
     logging_since: "从 %{time} 开始，记录到 %{descr} "
     notification_title: "在 %{descr} 中，共计 %{hours} 工时"
+    should_punch_in_message: "You were last seen at %{time}."
+    should_punch_in_title: "Don't forget to punch in!"
+    should_punch_out_message: "You have not been seen since %{time}, but are still logging time to %{descr}."
+    should_punch_out_title: "Still working?"
     state_descr_issue: "%{project} - #%{issue}"
     state_descr: "%{project}"
 
