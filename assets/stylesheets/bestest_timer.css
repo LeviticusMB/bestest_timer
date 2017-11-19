@@ -29,9 +29,9 @@
     box-sizing: border-box;
 }
 
-.bestest_timer_dialog input.bestest_timer_start {
-    width: 2em;
+.bestest_timer_dialog input[type='time'] {
     height: inherit;
     padding: 0;
+    margin-top: -2px;
     text-align: center;
 }
