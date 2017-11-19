@@ -34,7 +34,7 @@ $(document).ready(function () {
 
 		if (state.started) {
 			enabled = true;
-			title   = t('logging_since', { descr: state.descr, time: toTime(new Date(state.started)) });
+			title   = t('logging_since', { descr: state.descr, time: toTime(state.started) });
 		}
 
 		if (!bestest_timer.api_key) {
@@ -134,7 +134,7 @@ $(document).ready(function () {
 
 		console.log(`Last activity: ${delta} sec ago. User last seen ${idle} sec ago`);
 
-		if (!state.nagged &&state.started && delta > idleStopThreshold) {
+		if (!state.nagged && state.started && delta > idleStopThreshold) {
 			state.nagged = now;
 			saveState();
 
@@ -263,18 +263,18 @@ $(document).ready(function () {
 				$('<table/>').append(
 					$('<tr/>').append($('<td/>').text(t('time')), $('<td/>').append(
 						$('<input id="bestest_timer_start" type="time" pattern="[0-9]{2}:[0-9]{2}" size="5"/>')
-							.attr('value', toTime(new Date(state.started)))
+							.attr('value', toTime(state.started))
 							.on('input', function () {
 								if (!this.value) {
-									this.value = toTime(new Date(state.started));
+									this.value = toTime(state.started);
 								}
 							}),
 						'–',
 						$('<input id="bestest_timer_stop" type="time" pattern="[0-9]{2}:[0-9]{2}" size="5"/>')
-							.attr('value', toTime(new Date()))
+							.attr('value', toTime(Date.now()))
 							.on('input', function () {
 								if (!this.value) {
-									this.value = toTime(new Date());
+									this.value = toTime(Date.now());
 								}
 							})
 					)),
@@ -349,11 +349,13 @@ $(document).ready(function () {
 	}
 
 	function toTime(date) {
+		date = date instanceof Date ? date : new Date(date);
+
 		return date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' });
 	}
 
 	function timeComment(stopped) {
-		return toTime(new Date(state.started)) + '–' + toTime(new Date(stopped));
+		return toTime(state.started) + '–' + toTime(stopped);
 	}
 
 	function enableOrDisableCommit() {
