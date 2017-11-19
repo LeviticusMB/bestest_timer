@@ -28,3 +28,10 @@
     width: 100%;
     box-sizing: border-box;
 }
+
+.bestest_timer_dialog input.bestest_timer_start {
+    width: 2em;
+    height: inherit;
+    padding: 0;
+    text-align: center;
+}
