@@ -17,9 +17,10 @@ $(document).ready(function () {
 
 	var beta = localStorage.getItem('bestest_timer') === 'beta';
 
-	var idleStartThreshold =  5 * 60;
-	var idleStopThreshold  = 45 * 60;
-	var idleSleepThreshold = 30 * 60;
+	var idleThreshold       =  1 * 60;
+	var idleStartThreshold  =  5 * 60;
+	var idleStopThreshold   = 45 * 60;
+	var idleSleepThreshold  = 30 * 60;
 
 	var userLastSeen = Date.now();
 
@@ -93,7 +94,14 @@ $(document).ready(function () {
 	});
 
 	function userDetected() {
-		userLastSeen = Date.now();
+		var now = Date.now();
+
+		if (now - userLastSeen > idleThreshold * 1000 && currentIssueVisible()) {
+			// User returned to view current issue
+			activityDetected();
+		}
+
+		userLastSeen = now;
 
 		if (!arguments[0] || !/mousemove|scroll/.test(arguments[0].type)) {
 			console.log("User presence detected!");
@@ -101,11 +109,15 @@ $(document).ready(function () {
 	}
 
 	function activityDetected(ts) {
-		if (ts || !state.nagged /* Once we've nagged once, leave lastActivity as-is, unless forced */) {
-			state.lastActivity = ts || Date.now();
-			saveState();
-			console.log("Activity detected at " + new Date(state.lastActivity));
-		}
+		state.lastActivity = ts || Date.now();
+		saveState();
+		console.log("Activity detected at " + new Date(state.lastActivity));
+	}
+
+	function currentIssueVisible() {
+		return state.started &&
+		      (state.project && bestest_timer.project && state.project.id === bestest_timer.project.id) &&
+              (!state.issue  || bestest_timer.issue   && state.issue.id   === bestest_timer.issue.id);
 	}
 
 	function checkIdleTimeout() {
@@ -129,9 +141,8 @@ $(document).ready(function () {
 		// Activity reminder handling
 		var delta = (now - state.lastActivity) / 1000;
 
-		console.log(`Last activity: ${delta} sec ago. User last seen ${idle} sec ago`);
-
 		if (!state.nagged && state.started && delta > idleStopThreshold) {
+			console.log(`Punch out: Last activity ${delta} sec ago. User last seen ${idle} sec ago`);
 			state.nagged = now;
 			saveState();
 
@@ -139,7 +150,8 @@ $(document).ready(function () {
 				openDialog();
 			});
 		}
-		else if (!state.nagged && !state.started && idle < 60 /* not idle */ && delta > idleStartThreshold) {
+		else if (!state.nagged && !state.started && idle < idleThreshold /* not idle */ && delta > idleStartThreshold) {
+			console.log(`Punch in: Last activity ${delta} sec ago. User last seen ${idle} sec ago`);
 			state.nagged = now;
 			saveState();
 
@@ -425,7 +437,7 @@ $(document).ready(function () {
 
 	// Activate nag requesters
 
-	setInterval(checkIdleTimeout, 10000);
+	setInterval(checkIdleTimeout, 1000);
 
 	document.addEventListener && document.addEventListener('visibilitychange', function () {
 		if (!document.hidden) {
@@ -438,6 +450,11 @@ $(document).ready(function () {
 	$(window).click(userDetected);
 	$(window).scroll(userDetected);
 	$(window).mousemove(userDetected);
+
+	if (currentIssueVisible()) {
+		// The issue/project we're logging to was just (re)loaded
+		activityDetected();
+	}
 
 	// Curry "Edit time" fields
 
