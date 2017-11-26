@@ -13,6 +13,7 @@ $(document).ready(function () {
 		activities: null,
 		lastActivity: null,
 		nagged: null,
+		userLastSeen: Date.now(),
 	};
 
 	var beta = localStorage.getItem('bestest_timer') === 'beta';
@@ -21,8 +22,6 @@ $(document).ready(function () {
 	var idleStartThreshold  =  5 * 60;
 	var idleStopThreshold   = 45 * 60;
 	var idleSleepThreshold  = 30 * 60;
-
-	var userLastSeen = Date.now();
 
 	var state;
 	var stateKey = 'bestest_timer/' + bestest_timer.user_id;
@@ -94,16 +93,18 @@ $(document).ready(function () {
 	});
 
 	function userDetected() {
-		var now = Date.now();
+		var now  = Date.now();
+		var last = state.userLastSeen;
 
-		if (now - userLastSeen > idleThreshold * 1000 && currentIssueVisible()) {
+		if (now - last > idleThreshold * 1000 && currentIssueVisible()) {
 			// User returned to view current issue
 			activityDetected();
 		}
 
-		userLastSeen = now;
+		state.userLastSeen = now;
 
-		if (!arguments[0] || !/mousemove|scroll/.test(arguments[0].type)) {
+		if (now - last > 1000) {
+			saveState();
 			console.log("User presence detected!");
 		}
 	}
@@ -125,7 +126,7 @@ $(document).ready(function () {
 
 		// User idle handling
 
-		var idle = (now - userLastSeen) / 1000;
+		var idle = (now - state.userLastSeen) / 1000;
 
 		if (!state.lastActivity) {
 			activityDetected();
@@ -135,7 +136,7 @@ $(document).ready(function () {
 
 			// * Once user is *not* working, set activity to time when user returns
 			// * Once user *is* working, set activity to time when user left
-			activityDetected(state.started ? userLastSeen : Date.now());
+			activityDetected(state.started ? state.userLastSeen : Date.now());
 		}
 
 		// Activity reminder handling
@@ -241,6 +242,7 @@ $(document).ready(function () {
 				.append($('<input/>', { type: 'radio', name: 'activity', value: activity.id, checked: activity.id === state.activity })
 					.click(function () {
 						state.activity = Number(this.value);
+						saveState();
 						enableOrDisableCommit();
 					})
 				)
@@ -277,6 +279,7 @@ $(document).ready(function () {
 				$('<input id="bestest_timer_comment" type="text" autocomplete="off" autofocus />').attr('value', state.comment)
 					.change(function () {
 						state.comment = this.value;
+						saveState();
 					})
 					.keyup(function (event) {
 						if (event.keyCode === 13) {
@@ -450,6 +453,8 @@ $(document).ready(function () {
 	$(window).click(userDetected);
 	$(window).scroll(userDetected);
 	$(window).mousemove(userDetected);
+
+	userDetected();
 
 	if (currentIssueVisible()) {
 		// The issue/project we're logging to was just (re)loaded
