@@ -139,7 +139,7 @@ $(document).ready(function () {
 		}
 		else if (!state.started /* Not working */ &&
 		         now - state.lastActivity > 4 * 3600 * 1000 /* Last activity > 4 hrs ago */ &&
-		         new Date(state.lastActivity).getDate != new Date().getDate() /* Not today */) {
+		         new Date(state.lastActivity).getDate() != new Date().getDate() /* Not today */) {
 			activityDetected();
 		}
 
