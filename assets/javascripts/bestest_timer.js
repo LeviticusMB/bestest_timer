@@ -125,7 +125,6 @@ $(document).ready(function () {
 		var now = Date.now();
 
 		// User idle handling
-
 		var idle = (now - state.userLastSeen) / 1000;
 
 		if (!state.lastActivity) {
@@ -138,12 +137,17 @@ $(document).ready(function () {
 			// * Once user *is* working, set activity to time when user left
 			activityDetected(state.started ? state.userLastSeen : Date.now());
 		}
+		else if (!state.started /* Not working */ &&
+		         now - state.lastActivity > 4 * 3600 * 1000 /* Last activity > 4 hrs ago */ &&
+		         new Date(state.lastActivity).getDate != new Date().getDate() /* Not today */) {
+			activityDetected();
+		}
 
 		// Activity reminder handling
-		var delta = (now - state.lastActivity) / 1000;
+		var inactive = (now - state.lastActivity) / 1000;
 
-		if (!state.nagged && state.started && delta > idleStopThreshold) {
-			console.log(`Punch out: Last activity ${delta} sec ago. User last seen ${idle} sec ago`);
+		if (!state.nagged && state.started && inactive > idleStopThreshold) {
+			console.log(`Punch out: Last activity ${inactive} sec ago. User last seen ${idle} sec ago`);
 			state.nagged = now;
 			saveState();
 
@@ -151,8 +155,8 @@ $(document).ready(function () {
 				openDialog();
 			});
 		}
-		else if (!state.nagged && !state.started && idle < idleThreshold /* not idle */ && delta > idleStartThreshold) {
-			console.log(`Punch in: Last activity ${delta} sec ago. User last seen ${idle} sec ago`);
+		else if (!state.nagged && !state.started && idle < idleThreshold /* not idle */ && inactive > idleStartThreshold) {
+			console.log(`Punch in: Last activity ${inactive} sec ago. User last seen ${idle} sec ago`);
 			state.nagged = now;
 			saveState();
 
