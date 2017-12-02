@@ -105,14 +105,12 @@ $(document).ready(function () {
 
 		if (now - last > 1000) {
 			saveState();
-			console.log("User presence detected!");
 		}
 	}
 
 	function activityDetected(ts) {
 		state.lastActivity = ts || Date.now();
 		saveState();
-		console.log("Activity detected at " + new Date(state.lastActivity));
 	}
 
 	function currentIssueVisible() {
@@ -131,8 +129,6 @@ $(document).ready(function () {
 			activityDetected();
 		}
 		else if (idle > idleSleepThreshold) {
-			console.log("User is idle");
-
 			// * Once user is *not* working, set activity to time when user returns
 			// * Once user *is* working, set activity to time when user left
 			activityDetected(state.started ? state.userLastSeen : Date.now());
@@ -147,7 +143,6 @@ $(document).ready(function () {
 		var inactive = (now - state.lastActivity) / 1000;
 
 		if (!state.nagged && state.started && inactive > idleStopThreshold) {
-			console.log(`Punch out: Last activity ${inactive} sec ago. User last seen ${idle} sec ago`);
 			state.nagged = now;
 			saveState();
 
@@ -156,7 +151,6 @@ $(document).ready(function () {
 			});
 		}
 		else if (!state.nagged && !state.started && idle < idleThreshold /* not idle */ && inactive > idleStartThreshold) {
-			console.log(`Punch in: Last activity ${inactive} sec ago. User last seen ${idle} sec ago`);
 			state.nagged = now;
 			saveState();
 
