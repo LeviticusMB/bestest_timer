@@ -21,3 +21,31 @@ And that's all there is to it.
 ```bash
   git pull
 ```
+
+# Branches/major releases
+
+## `master`
+
+The `master` branch tracks the latest stable release.
+
+## `v1.2` (2017-12-02)
+
+The "Oops, I forgot" release.
+
+* Reminders! *Bestest Punch Clock* will now remind you to punch in or punch out.
+* Editable punch in/punch out time. Fix your mistakes before you punch out. [PR from kybersoft]
+* On Redmine's *Edit Spent Time* page, synchronize the *Hours* field with the time information from the *Comment* field. Edit one and the other will automatically update.
+* Disable *Bestest Punch Clock* button if we know punch if won't work. Provide help in tool tip.
+
+## `v1.1` (2017-06-02)
+
+Small UI improvments.
+
+* Link to current project and issue.
+* Use radio buttons for activity instead of a dropdown menu.
+* Added a hack to remove black line in Safari.
+* Disabled Punch out button if no activity has been selected.
+
+## `v1.0` (2017-03-08)
+
+Initial release branch.

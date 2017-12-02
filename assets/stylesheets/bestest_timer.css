@@ -28,3 +28,14 @@
     width: 100%;
     box-sizing: border-box;
 }
+
+.bestest_timer_dialog input[type='time'] {
+    height: inherit;
+    padding: 0;
+    margin-top: -2px;
+    text-align: center;
+}
+
+.bestest_timer_dialog input:invalid {
+    background-color: pink;
+}
