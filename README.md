@@ -28,7 +28,7 @@ And that's all there is to it.
 
 The `master` branch tracks the latest stable release.
 
-## `v1.2`
+## `v1.2` (2017-12-02)
 
 The "Oops, I forgot" release.
 
