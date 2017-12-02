@@ -35,7 +35,7 @@ The "Oops, I forgot" release.
 * Reminders! *Bestest Punch Clock* will now remind you to punch in or punch out.
 * Editable punch in/punch out time. Fix your mistakes before you punch out. [PR from kybersoft]
 * On Redmine's *Edit Spent Time* page, synchronize the *Hours* field with the time information from the *Comment* field. Edit one and the other will automatically update.
-* Disable *Bestest Punch Clock* button if we know punch if won't work. Provide help in tool tip.
+* Disable *Bestest Punch Clock* button if we know *Punch in* won't work. Provide help in tool tip.
 
 ## `v1.1` (2017-06-02)
 
