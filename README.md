@@ -8,27 +8,29 @@ And that's all there is to it.
 
 ![Bestest Punch Clock screenshot](README.1.png)
 
-# Installation
+## Installation
 
 `cd` into the `redmine/plugins` folder and run:
+
 ```bash
   git clone https://github.com/LeviticusMB/bestest_timer.git
 ```
 
-# Upgrade to latest stable release
+## Upgrade to latest stable release
 
 `cd` into the `redmine/plugins` folder and run:
+
 ```bash
   git pull
 ```
 
-# Branches/major releases
+## Branches/major releases
 
-## `master`
+### `master`
 
 The `master` branch tracks the latest stable release.
 
-## `v1.2` (2017-12-02)
+### `v1.2` (2017-12-02)
 
 The "Oops, I forgot" release.
 
@@ -37,7 +39,7 @@ The "Oops, I forgot" release.
 * On Redmine's *Edit Spent Time* page, synchronize the *Hours* field with the time information from the *Comment* field. Edit one and the other will automatically update.
 * Disable *Bestest Punch Clock* button if we know *Punch in* won't work. Provide help in tool tip.
 
-## `v1.1` (2017-06-02)
+### `v1.1` (2017-06-02)
 
 Small UI improvments.
 
@@ -46,6 +48,6 @@ Small UI improvments.
 * Added a hack to remove black line in Safari.
 * Disabled Punch out button if no activity has been selected.
 
-## `v1.0` (2017-03-08)
+### `v1.0` (2017-03-08)
 
 Initial release branch.
