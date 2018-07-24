@@ -69,6 +69,11 @@ $(document).ready(function () {
 			state.issue = { id: state.issue, _lnk: 'Issue #' + state.issue };
 		}
 
+                // Workaround for an updateTime issue in v1.2.0
+                if (state.started && state.started < 1e9) {
+                    state.started = null;
+                }
+
 		updateUI();
 	}
 
@@ -383,7 +388,7 @@ $(document).ready(function () {
 	function updateTime(ts, input) {
 		var hhmm = /^([0-9]{2}):([0-9]{2})$/.exec(document.getElementById(input).value);
 
-		if (hhmm) {
+		if (ts && hhmm) {
 			var date = new Date(ts);
 			date.setHours(hhmm[1]);
 			date.setMinutes(hhmm[2]);
