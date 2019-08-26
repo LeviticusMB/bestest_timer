@@ -5,7 +5,7 @@ en:
     plugin_name: "Bestest Punch Clock for Redmine"
 
     start: "Punch in"
-    recording: "(Logging)"
+    recording: "Logging (%{hhmm})"
 
     details: "Details"
     time: "Spent time:"
