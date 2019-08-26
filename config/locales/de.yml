@@ -5,7 +5,7 @@ de:
     plugin_name: "Die besteste Stempeluhr für Redmine"
 
     start: "Uhr starten"
-    recording: "(Aufzeichnung)"
+    recording: "Aufzeichnung (%{hhmm})"
 
     details: "Details"
     time: "Zeit:"
@@ -22,15 +22,15 @@ de:
 
     logging_since: "Buchung auf %{descr} seit %{time}"
     notification_title: "%{hours} Stunden zu %{descr} gebucht"
-    should_punch_in_message: "You were last seen at %{time}."
-    should_punch_in_title: "Don't forget to punch in!"
-    should_punch_out_message: "You have not been seen since %{time}, but are still logging time to %{descr}."
-    should_punch_out_title: "Still working?"
+    should_punch_in_message: "Letzte Aktivität: %{time}."
+    should_punch_in_title: "Hast Du vergessen, die Aufzeichnung zu starten?"
+    should_punch_out_message: "Du warst sein %{time} nicht mehr aktiv,\n aber Du zeichnest immer noch für das Projekt %{descr} auf."
+    should_punch_out_title: "Lebst Du noch? :-)"
     state_descr_issue: "%{project}, Ticket #%{issue}"
     state_descr: "%{project}"
 
-    need_rest_api: "Bitte prüfen Sie ob 'REST-Schnittstelle aktivieren' in Redmine unter Administration/Konfiguration/API aktiviert ist."
-    no_permission: "Sie haben keine Berechtigungen Zeit auf %{project} zu buchen."
-    not_enabled: "Time tracking not enabled for %{project}."
-    nothing_inferred: "Weder das Projekt noch das Ticket konnte von der aktuellen Seite abgeleitet werden."
-    submit_failed: "Fehler beim Buchen zu Redmine: %{error}"
+    need_rest_api: "Bitte prüfe, ob die 'REST-Schnittstelle aktivieren'\n unter Administration/Konfiguration/API aktiviert ist."
+    no_permission: "Du hast keine Berechtigung auf das Projekt %{project} zu buchen."
+    not_enabled: "Die (Zeit-)Aufzeichnungsfunktion ist für das %{project} nicht aktiviert."
+    nothing_inferred: "Basierend auf der aktuellen Seite,\n konnten weder das Projekt noch das Ticket automatisch bestimmt werden."
+    submit_failed: "Fehler beim Buchen: %{error}"
