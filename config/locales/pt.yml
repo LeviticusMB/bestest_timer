@@ -5,7 +5,7 @@
     plugin_name: "Bestest Punch Clock for Redmine"
 
     start: "Contar"
-    recording: "(Contando)"
+    recording: "Contando (%{hhmm})"
 
     details: "Detalhes"
     time: "Tempos gastos:"
