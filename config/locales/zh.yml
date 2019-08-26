@@ -5,7 +5,7 @@ zh:
     plugin_name: "Redmine任务计时登记工具"
 
     start: "计时开始"
-    recording: "[正在记录]"
+    recording: "正在记录 (%{hhmm})"
 
     details: "详情"
     time: "耗时："
