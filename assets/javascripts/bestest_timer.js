@@ -200,7 +200,7 @@ $(document).ready(function () {
 					project_id: state.project.id,
 					issue_id: state.issue && state.issue.id,
 					activity_id: state.activity,
-					hours: (stopped - state.started) / 1000 / 60 / 60,
+					hours: Math.floor((stopped - state.started + 179999)/180000)/20,
 					comments: comment,
 				}
 			}),
