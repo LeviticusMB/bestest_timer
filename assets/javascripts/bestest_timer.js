@@ -35,6 +35,7 @@ $(document).ready(function () {
 		if (state.started) {
 			enabled = true;
 			title   = t('logging_since', { descr: state.descr, time: toTime(state.started) });
+			recording = t('recording', { hhmm: new Date(Date.now() - state.started).toISOString().slice(11, -8) });
 		}
 
 		if (!bestest_timer.api_key) {
@@ -53,8 +54,7 @@ $(document).ready(function () {
 			enabled = true;
 		}
 
-		button.text(state.started ? t('recording') : t('start')).attr('title', title).attr('disabled', !enabled);
-
+		button.text(state.started ? recording : t('start')).attr('title', title).attr('disabled', !enabled);
 	}
 
 	function loadState() {
