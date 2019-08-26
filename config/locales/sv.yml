@@ -5,7 +5,7 @@ sv:
     plugin_name: "Bästaste stämpelklockan för Redmine"
 
     start: "Stämpla in"
-    recording: "(Loggar tid)"
+    recording: "Loggar tid (%{hhmm})"
 
     details: "Detaljer"
     time: "Spenderad tid:"
