@@ -5,7 +5,7 @@ it:
     plugin_name: "Il miglior Orologio Segnatempo per Redmine"
 
     start: "Registra tempo"
-    recording: "(Registrando)"
+    recording: "Registrando (%{hhmm})"
 
     details: "Dettagli"
     time: "Tempo impiegato:"
